@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="generator.properties"/>
+
+    <context id="testTables" targetRuntime="MyBatis3">
+        <!-- 生成的Java文件的编码 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <!-- 格式化java代码 -->
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+        <!-- 格式化XML代码 -->
+        <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 -->
+            <property name="suppressAllComments" value="${mbg.no_comments}"/>
+            <property name="suppressDate" value="false"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+        <!-- 数据库连接的信息  -->
+        <jdbcConnection driverClass="${mbg.jdbc_driver}"
+                        connectionURL="${mbg.jdbc_url}"
+                        userId="${mbg.jdbc_user}"
+                        password="${mbg.jdbc_password}">
+        </jdbcConnection>
+
+        <!-- 默认false，把JDBC DECIMAL和NUMERIC类型解析为Integer，
+        为true时把JDBC DECIMAL和NUMERIC类型解析为java.math.BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="${mbg.force_big_decimals}"/>
+        </javaTypeResolver>
+
+        <!-- 实体类生成的位置 -->
+        <javaModelGenerator targetPackage="com.demo.${mbg.package_name}.domain"
+                            targetProject="${mbg.target_path}">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="${mbg.sub_package}"/>
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="${mbg.trim_strings}"/>
+        </javaModelGenerator>
+        <!-- mapper映射文件生成的位置 -->
+        <sqlMapGenerator targetPackage="com.demo.${mbg.package_name}.mappers"
+                         targetProject="${mbg.target_path}">
+            <property name="enableSubPackages" value="${mbg.sub_package}"/>
+        </sqlMapGenerator>
+        <!-- mapper接口生成的位置 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.demo.${mbg.package_name}.dao"
+                             targetProject="${mbg.target_path}">
+            <property name="enableSubPackages" value="${mbg.sub_package}"/>
+        </javaClientGenerator>
+        <!-- 指定要生成数据库哪些表，可指定多个！ -->
+        <table tableName="${mbg.table_name}"></table>
+    </context>
+</generatorConfiguration>

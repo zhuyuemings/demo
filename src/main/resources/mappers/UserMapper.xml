@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.system.dao.UserMapper">
+    <select id="queryById" resultType="com.demo.system.domain.User" parameterType="java.lang.String">
+        SELECT
+        id, username, password, status, truename, sex, tel, create_time as createTime
+        FROM
+        sys_user
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="queryByOffset" resultType="com.demo.system.domain.User">
+        SELECT
+        id, username, password, status, truename, sex, tel, create_time as createTime
+        FROM
+        sys_user
+        ORDER BY
+        create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="queryByObject" parameterType="com.demo.system.domain.User" resultType="com.demo.system.domain.User">
+        SELECT
+        id, username, password, status, truename, sex, tel, create_time as createTime
+        FROM
+        sys_user
+        WHERE 1=1
+        <if test="t.id != null &amp;&amp; t.id != ''">
+            AND id=#{t.id}
+        </if>
+        <if test="t.username != null &amp;&amp; t.username != ''">
+            AND username=#{t.username}
+        </if>
+        <if test="t.password != null &amp;&amp; t.password != ''">
+            AND password=#{t.password}
+        </if>
+        <if test="t.status != null">
+            AND status=#{t.status}
+        </if>
+        <if test="t.truename != null &amp;&amp; t.truename != ''">
+            AND truename LIKE concat('%', #{t.truename}, '%') COLLATE utf8_unicode_ci
+        </if>
+        <if test="t.sex != null">
+            AND sex=#{t.sex}
+        </if>
+        <if test="t.tel != null">
+            AND tel LIKE concat('%', #{t.tel}, '%') COLLATE utf8_unicode_ci
+        </if>
+        ORDER BY
+        create_time DESC
+    </select>
+
+    <insert id="insert" parameterType="com.demo.system.domain.User">
+        <selectKey keyProperty="t.id" order="BEFORE" resultType="java.lang.String">
+            SELECT uuid()
+        </selectKey>
+        INSERT INTO sys_user (id, username, password, status, truename, sex, tel, create_time)
+        VALUES (#{t.id}, #{t.username}, #{t.password}, #{t.status}, #{t.truename}, #{t.sex}, #{t.tel}, now())
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.demo.system.domain.User">
+        <selectKey keyProperty="t.id" order="BEFORE" resultType="java.lang.String">
+            SELECT uuid()
+        </selectKey>
+        INSERT INTO sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="t.username != null &amp;&amp; t.username != ''">
+                username,
+            </if>
+            <if test="t.password != null &amp;&amp; t.password != ''">
+                password,
+            </if>
+            <if test="t.status != null">
+                status,
+            </if>
+            <if test="t.truename != null &amp;&amp; t.truename != ''">
+                truename,
+            </if>
+            <if test="t.sex != null">
+                sex,
+            </if>
+            <if test="t.tel != null">
+                tel,
+            </if>
+            create_time
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{t.id},
+            <if test="t.username != null &amp;&amp; t.username != ''">
+                #{t.username},
+            </if>
+            <if test="t.password != null &amp;&amp; t.password != ''">
+                #{t.password},
+            </if>
+            <if test="t.status != null">
+                #{t.status},
+            </if>
+            <if test="t.truename != null &amp;&amp; t.truename != ''">
+                #{t.truename},
+            </if>
+            <if test="t.sex != null">
+                #{t.sex},
+            </if>
+            <if test="t.tel != null">
+                #{t.tel},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <!--id, username, password, status, truename, sex, tel, create_time-->
+    <update id="updateById" parameterType="com.demo.system.domain.User">
+        UPDATE sys_user
+        SET
+        username=#{t.username},password=#{t.password},
+        status=#{t.status},truename=#{t.truename},sex=#{t.sex},
+        tel=#{t.tel},create_time=#{t.createTime}
+        WHERE id=#{t.id}
+    </update>
+
+    <update id="updateByIdSelective" parameterType="com.demo.system.domain.User">
+        UPDATE sys_user
+        SET
+        <trim suffixOverrides=",">
+            <if test="t.username != null &amp;&amp; t.username != ''">
+                username=#{t.username},
+            </if>
+            <if test="t.password != null &amp;&amp; t.password != ''">
+                password=#{t.password},
+            </if>
+            <if test="t.status != null">
+                status=#{t.status},
+            </if>
+            <if test="t.truename != null &amp;&amp; t.truename != ''">
+                truename=#{t.truename},
+            </if>
+            <if test="t.sex != null">
+                sex=#{t.sex},
+            </if>
+            <if test="t.tel != null">
+                tel=#{t.tel},
+            </if>
+            <if test="t.createTime != null">
+                create_time=#{t.createTime},
+            </if>
+        </trim>
+        WHERE id=#{t.id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        UPDATE sys_user
+        SET status=0
+        WHERE id=#{id}
+    </delete>
+
+    <select id="getEnabledUserByUserName" parameterType="java.lang.String" resultType="com.demo.system.domain.User">
+        SELECT
+        id, username, password, status, truename, sex, tel, create_time as createTime
+        FROM
+        sys_user
+        WHERE
+        username=#{username} AND status=1
+        ORDER BY
+        create_time DESC
+        LIMIT 1
+    </select>
+</mapper>

@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Promets</title>
+  </head>
+  <body>
+  Welcome, Many hugs!<br>
+  <input id="username" name="username" type="text">
+  <input id="password" name="password" type="password">
+  <input id="login" type="button" value="login" onclick="login()">
+  <script>
+      function login() {
+          var username = document.getElementById("username").value;
+          var password = document.getElementById("password").value;
+          console.log(username + ":" + password);
+          location.href = ""
+      }
+  </script>
+  </body>
+</html>
